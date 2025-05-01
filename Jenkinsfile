@@ -24,6 +24,15 @@ pipeline {
             }
         }
 
+        stage('Build Features') {
+            steps {
+                sh '''
+                    #!/bin/bash
+                    python3 src/features/build_features.py 
+                '''
+            }
+        }
+
         stage('Train Model') {
             steps {
                 sh '''
