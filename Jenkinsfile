@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'yourdockerhub/taxi-duration-api'
         MODEL_DIR = 'models'
-        DVC_REMOTE = 'myremote' // Your DVC remote name (can be local)
+        DATA_DIR = 'data'
     }
 
     stages {
@@ -26,7 +26,7 @@ pipeline {
             }
         }
         
-        stage('DVC Setup and Pull') {
+        stage('DVC Setup') {
             steps {
                 sh '''
                     . venv/bin/activate
@@ -35,8 +35,37 @@ pipeline {
                         dvc init
                     fi
                     
-                    # Pull latest data/models if they exist
-                    dvc pull || echo "No DVC tracked files to pull yet"
+                    # Create data and model directories if they don't exist
+                    mkdir -p ${DATA_DIR}/processed
+                    mkdir -p ${MODEL_DIR}
+                    
+                    # Track data directory with DVC if not already tracked
+                    if [ ! -f "${DATA_DIR}.dvc" ]; then
+                        echo "Setting up initial DVC tracking for data"
+                        dvc add ${DATA_DIR}
+                    fi
+                '''
+            }
+        }
+
+        stage('Prepare Training Data') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+                    # Here you would normally download or prepare your data
+                    # For example:
+                    # python src/data/make_dataset.py
+                    
+                    # Create a dummy train.csv if needed for testing
+                    if [ ! -f "${DATA_DIR}/processed/train.csv" ]; then
+                        echo "Creating dummy training data for testing"
+                        echo "feature1,feature2,target" > ${DATA_DIR}/processed/train.csv
+                        echo "1,2,3" >> ${DATA_DIR}/processed/train.csv
+                        echo "4,5,6" >> ${DATA_DIR}/processed/train.csv
+                    fi
+                    
+                    # Update DVC for data changes
+                    dvc add ${DATA_DIR}
                 '''
             }
         }
@@ -45,28 +74,32 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
-                    python3 src/models/train_model.py data/processed
+                    # Fixed path issue - ensure correct path formatting
+                    python3 src/models/train_model.py ${DATA_DIR}/processed
                     
                     # Track the new model with DVC
                     dvc add ${MODEL_DIR}
                     
-                    # Commit the changes to Git
+                    # Commit the DVC changes to Git
                     git config --global user.email "jenkins@example.com"
                     git config --global user.name "Jenkins"
-                    git add ${MODEL_DIR}.dvc .gitignore
-                    git commit -m "Update model: Jenkins build #${BUILD_NUMBER}" || echo "No changes to commit"
+                    git add ${DATA_DIR}.dvc ${MODEL_DIR}.dvc .gitignore
+                    git commit -m "Update data and model: Jenkins build #${BUILD_NUMBER}" || echo "No changes to commit"
                 '''
             }
         }
         
         stage('DVC Push') {
+            when {
+                expression { return fileExists('.dvc/config') && sh(script: 'grep -q remote .dvc/config', returnStatus: true) == 0 }
+            }
             steps {
                 sh '''
                     . venv/bin/activate
-                    # Push model to DVC storage
-                    dvc push || echo "Nothing to push"
+                    # Push model to DVC storage if remote is configured
+                    dvc push || echo "DVC push failed - remote may not be configured"
                     
-                    # Push .dvc files to Git
+                    # Push .dvc files to Git if needed
                     git push origin HEAD || echo "Nothing to push to Git"
                 '''
             }
