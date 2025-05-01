@@ -28,6 +28,7 @@ pipeline {
             steps {
                 sh '''
                     #!/bin/bash
+                    . venv/bin/activate
                     python3 src/features/build_features.py 
                 '''
             }
