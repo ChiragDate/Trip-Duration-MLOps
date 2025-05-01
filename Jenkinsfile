@@ -29,8 +29,6 @@ pipeline {
                 sh '''
                     #!/bin/bash
                     . venv/bin/activate
-                    mkdir -p dvc-remote
-                    dvc remote modify workspace_remote url ./dvc-remote
                     dvc pull
 
                 '''

@@ -1,5 +1,4 @@
 [core]
     remote = workspace_remote
-
-[remote "workspace_remote"]
-    url = ./dvc-remote
+['remote "workspace_remote"']
+    url = ../dvc-remote
