@@ -20,7 +20,17 @@ pipeline {
                         . venv/bin/activate
                         pip install --upgrade pip
                         pip install -r requirements.txt
+                        pip install dvc
                     '''
+            }
+        }
+        stage('Pull Data from DVC') {
+            steps {
+                sh '''
+                    #!/bin/bash
+                    . venv/bin/activate
+                    dvc pull # Pull data from DVC
+                '''
             }
         }
 
