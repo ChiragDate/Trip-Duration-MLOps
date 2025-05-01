@@ -1,4 +1,5 @@
 # train_model.py
+import os
 import pathlib
 import sys
 import yaml
@@ -16,27 +17,30 @@ def train_model(train_features, target, n_estimators, max_depth, seed):
 
 def save_model(model, output_path):
     # Save the trained model to the specified output path
-    joblib.dump(model, output_path + 'models/model.joblib')
+    joblib.dump(model, os.path.join(output_path, 'model.joblib'))
 
 def main():
-
     curr_dir = pathlib.Path(__file__)
     home_dir = curr_dir.parent.parent.parent
-    params_file = home_dir.as_posix() + '/params.yaml'
+    params_file = os.path.join(home_dir, 'params.yaml')
     print(f"Params file: {params_file}")
     params = yaml.safe_load(open(params_file))["train_model"]
 
     input_file = sys.argv[1]
-    data_path = home_dir.as_posix() + input_file
+    # Fix this path - input_file is already the path to processed directory
+    data_path = input_file if os.path.isabs(input_file) else os.path.join(home_dir, input_file)
     print(f"Data: {data_path}")
-    output_path = home_dir.as_posix() + '/models'
+    
+    output_path = os.path.join(home_dir, 'models')
     print(f"Output_path: {output_path}")
     
     pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
     
     TARGET = 'trip_duration'
-    print(f"train features: {data_path + '/train.csv'}")
-    train_features = pd.read_csv(data_path + '/train.csv')
+    train_csv_path = os.path.join(data_path, 'train.csv')
+    print(f"train features: {train_csv_path}")
+    
+    train_features = pd.read_csv(train_csv_path)
     X = train_features.drop(TARGET, axis=1)
     y = train_features[TARGET]
     print("Reached train model")
@@ -44,8 +48,6 @@ def main():
     print("model trained")
     save_model(trained_model, output_path)
     print("model saved")
-
-    
 
 if __name__ == "__main__":
     main()

@@ -74,17 +74,16 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
-                    # Fixed path issue - ensure correct path formatting
-                    python3 src/models/train_model.py ${DATA_DIR}/processed
+                    python3 src/models/train_model.py data/processed
                     
                     # Track the new model with DVC
-                    dvc add ${MODEL_DIR}
+                    dvc add models
                     
                     # Commit the DVC changes to Git
                     git config --global user.email "jenkins@example.com"
                     git config --global user.name "Jenkins"
-                    git add ${DATA_DIR}.dvc ${MODEL_DIR}.dvc .gitignore
-                    git commit -m "Update data and model: Jenkins build #${BUILD_NUMBER}" || echo "No changes to commit"
+                    git add models.dvc .gitignore
+                    git commit -m "Update model: Jenkins build #${BUILD_NUMBER}" || echo "No changes to commit"
                 '''
             }
         }
