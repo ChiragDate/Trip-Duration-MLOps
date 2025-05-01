@@ -16,7 +16,7 @@
             stage('Install Dependencies') {
                 steps {
                     sh '''
-                        python -m venv venv
+                        python.exe -m venv venv
                         . venv/bin/activate
                         pip install -r requirements.txt
                         pip install dvc
