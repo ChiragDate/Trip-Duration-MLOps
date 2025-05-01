@@ -5,6 +5,11 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 class PredictionInput(BaseModel):
     # Define the input parameters required for making predictions
     vendor_id:float
@@ -24,7 +29,7 @@ class PredictionInput(BaseModel):
     pickup_week_hour:float
 
 # Load the pre-trained RandomForest model
-model_path = "trip-duration\models\model.joblib"
+model_path = "C:/Users/cdate/Documents/Chirag/MachineLearning/Trip-Duration/trip-duration/models/model.joblib"
 model = load(model_path)
 
 @app.get("/")
