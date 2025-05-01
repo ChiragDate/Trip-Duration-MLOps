@@ -26,7 +26,7 @@ pipeline {
 
         stage('Train Model') {
             steps {
-                sh 'python3 src/models/train_model.py trip-duration/data/processed/train.csv'
+                sh 'python3 src/models/train_model.py data/processed/train.csv'
             }
         }
 
