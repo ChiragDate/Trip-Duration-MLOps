@@ -29,7 +29,9 @@ pipeline {
                 sh '''
                     #!/bin/bash
                     . venv/bin/activate
+                    dvc remote add -d localremote C:/Users/cdate/dvc-storage
                     dvc pull
+
 
                 '''
             }
