@@ -23,6 +23,7 @@ def main():
     curr_dir = pathlib.Path(__file__)
     home_dir = curr_dir.parent.parent.parent
     params_file = home_dir.as_posix() + '/params.yaml'
+    print(f"Params file: {params_file}")
     params = yaml.safe_load(open(params_file))["train_model"]
 
     input_file = sys.argv[1]
@@ -34,6 +35,7 @@ def main():
     pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
     
     TARGET = 'trip_duration'
+    print(f"train features: {data_path + '/train.csv'}")
     train_features = pd.read_csv(data_path + '/train.csv')
     X = train_features.drop(TARGET, axis=1)
     y = train_features[TARGET]
