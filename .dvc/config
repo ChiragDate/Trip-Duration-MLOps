@@ -1,4 +1,0 @@
-[core]
-    remote = localremote
-['remote "localremote"']
-    url = C:/Users/cdate/Documents/Chirag/MachineLearning/Trip-Duration/trip-duration/dvc-remote
