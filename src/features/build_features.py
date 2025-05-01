@@ -22,7 +22,7 @@ def save_data(train,test,output_path):
 if __name__ == '__main__':
     currdir = pathlib.Path(__file__)
     homedir = currdir.parent.parent.parent
-    trainpath = '/var/lib/jenkins/workspace/Trip-Duration/trip-duration/train.csv'
+    trainpath = '/var/lib/jenkins/workspace/Trip-Duration/train.csv'
     testpath = '/var/lib/jenkins/workspace/Trip-Duration/test.csv'
     
     train_data = pd.read_csv(trainpath)
