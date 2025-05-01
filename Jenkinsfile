@@ -28,7 +28,7 @@ pipeline {
             steps {
                 sh '''
                 #!/bin/bash
-                source venv/bin/activate
+                . venv/bin/activate
                 python3 src/models/train_model.py trip-duration/data/processed/train.csv
             '''
             }
