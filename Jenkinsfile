@@ -16,19 +16,28 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                        python3 -m venv venv
-                        . venv/bin/activate
-                        pip install --upgrade pip
-                        pip install -r requirements.txt
-                        pip install dvc
-                    '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    pip install dvc
+                '''
             }
+        }
+
+        stage('Import Raw Data') {
+            steps {
+                sh '''
+                    . venv/bin/activate
+                    dvc import-url https://drive.google.com/file/d/1vGG4pAQ51WjNdxPXK5gM5BXO4g_W7wdN/view?usp=sharing
+                    dvc import-url https://drive.google.com/file/d/1jnzjV27HWkxbzZPcPvDsRMe5110DM5QS/view?usp=sharing 
+                '''
+            } //train then test
         }
 
         stage('Build Features') {
             steps {
                 sh '''
-                    #!/bin/bash
                     . venv/bin/activate
                     python3 src/features/build_features.py 
                 '''
@@ -38,10 +47,9 @@ pipeline {
         stage('Train Model') {
             steps {
                 sh '''
-                #!/bin/bash
-                . venv/bin/activate
-                python3 src/models/train_model.py trip-duration/data/processed/train.csv
-            '''
+                    . venv/bin/activate
+                    python3 src/models/train_model.py trip-duration/data/processed/train.csv
+                '''
             }
         }
 
