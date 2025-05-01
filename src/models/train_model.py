@@ -21,7 +21,7 @@ def save_model(model, output_path):
 def main():
 
     curr_dir = pathlib.Path(__file__)
-    home_dir = curr_dir.parent.parent
+    home_dir = curr_dir.parent.parent.parent
     params_file = home_dir.as_posix() + '/params.yaml'
     params = yaml.safe_load(open(params_file))["train_model"]
 
