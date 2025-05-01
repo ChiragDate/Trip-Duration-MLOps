@@ -29,7 +29,8 @@ pipeline {
                 sh '''
                     #!/bin/bash
                     . venv/bin/activate
-                    mkdir -p /mnt/dvc-storage
+                    sudo mkdir -p /mnt/dvc-storage
+                    sudo chown -R jenkins:jenkins /mnt/dvc-storage
                     rsync -avz user@dev-machine:/path/to/dvc-storage/ /mnt/dvc-storage/
                     dvc pull # Pull data from DVC
                 '''
