@@ -1,4 +1,4 @@
 [core]
     remote = localremote
 ['remote "localremote"']
-    url = /mnt/dvc-storage
+    url = /var/lib/jenkins/dvc-cache
