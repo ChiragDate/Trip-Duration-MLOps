@@ -29,10 +29,10 @@ pipeline {
                 sh '''
                     #!/bin/bash
                     . venv/bin/activate
-                    sudo mkdir -p /mnt/dvc-storage
-                    sudo chown -R jenkins:jenkins /mnt/dvc-storage
-                    rsync -avz user@dev-machine:/path/to/dvc-storage/ /mnt/dvc-storage/
-                    dvc pull # Pull data from DVC
+                    mkdir -p dvc-remote
+                    dvc remote modify workspace_remote url ./dvc-remote
+                    dvc pull
+
                 '''
             }
         }
