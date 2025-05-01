@@ -18,9 +18,8 @@ pipeline {
                 sh '''
                     python3 -m venv venv
                     . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
-                    pip install dvc
+                    pip3 install -r requirements.txt
+                    pip3 install dvc
                 '''
             }
         }
