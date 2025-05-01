@@ -1,6 +1,4 @@
 [core]
     remote = localremote
-['remote "workspace_remote"']
-    url = ../dvc-remote
 ['remote "localremote"']
     url = C:/Users/cdate/Documents/Chirag/MachineLearning/Trip-Duration/trip-duration/dvc-remote
