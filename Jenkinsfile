@@ -29,6 +29,10 @@
                     sh '''
                         #!/bin/bash
                         . venv/bin/activate
+                        mkdir -p ./dvc-storage
+                        
+                        dvc remote add --local jenkins-remote ./dvc-storage
+                        dvc remote default --local jenkins-remote
                         dvc pull
                     '''
                 }
