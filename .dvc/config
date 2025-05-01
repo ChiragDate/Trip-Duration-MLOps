@@ -1,4 +1,4 @@
 [core]
     remote = localremote
 ['remote "localremote"']
-    url =  C:/Users/cdate/dvc-storage
+    url = C:/Users/cdate/dvc-storage
