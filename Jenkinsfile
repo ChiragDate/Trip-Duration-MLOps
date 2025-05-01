@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/ChiragDate/Trip-Duration-MLOps.git'
+                checkout scm
             }
         }
 
