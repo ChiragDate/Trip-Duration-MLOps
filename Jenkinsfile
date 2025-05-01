@@ -15,13 +15,18 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt'
+                sh '''
+                        python3 -m venv venv
+                        . venv/bin/activate
+                        pip install --upgrade pip
+                        pip install -r requirements.txt
+                    '''
             }
         }
 
         stage('Train Model') {
             steps {
-                sh 'python3 src/models/train_model.py'
+                sh 'python3 src/models/train_model.py trip-duration/data/processed/train.csv'
             }
         }
 
