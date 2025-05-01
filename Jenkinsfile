@@ -29,8 +29,8 @@ pipeline {
             steps {
                 sh '''
                     . venv/bin/activate
-                     dvc import-url https://drive.google.com/file/d/1vGG4pAQ51WjNdxPXK5gM5BXO4g_W7wdN/view?usp=sharing trip-duration --force
-                    dvc import-url https://drive.google.com/file/d/1jnzjV27HWkxbzZPcPvDsRMe5110DM5QS/view?usp=sharing trip-duration --force
+                     dvc import-url https://drive.google.com/file/d/1vGG4pAQ51WjNdxPXK5gM5BXO4g_W7wdN/view?usp=sharing trip-duration/train.csv --force
+                    dvc import-url https://drive.google.com/file/d/1jnzjV27HWkxbzZPcPvDsRMe5110DM5QS/view?usp=sharing trip-duration/test.csv --force
                 '''
             } //train then test
         }
