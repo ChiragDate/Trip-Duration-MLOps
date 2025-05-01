@@ -25,15 +25,15 @@ pipeline {
             }
         }
 
-        stage('Import Raw Data') {
-            steps {
-                sh '''
-                    . venv/bin/activate
-                     dvc import-url https://drive.google.com/file/d/1vGG4pAQ51WjNdxPXK5gM5BXO4g_W7wdN/view?usp=sharing /train.csv --force
-                    dvc import-url https://drive.google.com/file/d/1jnzjV27HWkxbzZPcPvDsRMe5110DM5QS/view?usp=sharing /test.csv --force
-                '''
-            } //train then test
-        }
+        stage('Pull Data from DVC') {
+             steps {
+                 sh '''
+                     #!/bin/bash
+                     . venv/bin/activate
+                     dvc pull
+                 '''
+             }
+         }
 
         stage('Build Features') {
             steps {
