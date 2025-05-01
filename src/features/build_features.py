@@ -22,8 +22,8 @@ def save_data(train,test,output_path):
 if __name__ == '__main__':
     currdir = pathlib.Path(__file__)
     homedir = currdir.parent.parent.parent
-    trainpath = homedir.as_posix()+'/data/raw/train.csv'
-    testpath = homedir.as_posix()+'/data/raw/test.csv'
+    trainpath = homedir.as_posix()+'/trip-duration/data/raw/train.csv'
+    testpath = homedir.as_posix()+'/trip-duration/data/raw/test.csv'
     
     train_data = pd.read_csv(trainpath)
     test_data = pd.read_csv(testpath)
