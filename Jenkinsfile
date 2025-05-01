@@ -24,18 +24,6 @@ pipeline {
                     '''
             }
         }
-        stage('Pull Data from DVC') {
-            steps {
-                sh '''
-                    #!/bin/bash
-                    . venv/bin/activate
-                    dvc remote add -d localremote C:/Users/cdate/dvc-storage -f
-                    dvc pull
-
-
-                '''
-            }
-        }
 
         stage('Build Features') {
             steps {
