@@ -21,7 +21,7 @@ pipeline {
 
         stage('Train Model') {
             steps {
-                sh 'python src/models/train_model.py'
+                sh 'python3 src/models/train_model.py'
             }
         }
 
