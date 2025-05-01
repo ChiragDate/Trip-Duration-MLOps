@@ -1,5 +1,0 @@
-[core]
-    remote = myremote
-['remote "localremote"']
-    url = /home/chirag/dvc-storage
-
