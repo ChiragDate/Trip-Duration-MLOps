@@ -34,7 +34,7 @@ def main():
     pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
     
     TARGET = 'trip_duration'
-    train_features = pd.read_csv(data_path + '/train.csv')
+    train_features = pd.read_csv(data_path)
     X = train_features.drop(TARGET, axis=1)
     y = train_features[TARGET]
     print("Reached train model")
