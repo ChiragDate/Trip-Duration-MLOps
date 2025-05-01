@@ -26,7 +26,7 @@ def main():
     params = yaml.safe_load(open(params_file))["train_model"]
 
     input_file = sys.argv[1]
-    data_path = home_dir.as_posix() + input_file
+    data_path = home_dir.as_posix() +"/" + input_file
     print(f"Data: {data_path}")
     output_path = home_dir.as_posix() + '/models'
     print(f"Output_path: {output_path}")
