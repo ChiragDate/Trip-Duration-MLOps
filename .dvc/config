@@ -1,6 +1,5 @@
 [core]
     remote = myremote
 ['remote "localremote"']
-    url = C:/Users/cdate/dvc-storage
-['remote "myremote"']
-    url = \
+    url = /home/chirag/dvc-storage
+
