@@ -2,7 +2,6 @@ pipeline {
     agent any
     
     environment {
-        // Define environment variables
         PYTHON_VERSION = '3.10.12'
         DVC_MODELS_DIR = "/home/mohit-marfatia/SPE/train-data"
         VENV_PATH = "${WORKSPACE}/trip_duration_venv"
@@ -38,6 +37,13 @@ pipeline {
                     fi
                     
                     # Configure DVC to use local directory for models
+                    dvc config core.no_scm true
+                    
+                    # Add the external data directory as a remote (if not already added)
+                    dvc remote add -d local-models ${DVC_MODELS_DIR}
+                    
+                    # Make sure the directories exist
+                    mkdir -p models data
                 '''
             }
         }
@@ -48,44 +54,24 @@ pipeline {
                     . ${VENV_PATH}/bin/activate
                     dvc --version
                     
+                    # First check if models and data are being tracked by DVC
+                    if [ ! -f models.dvc ] && [ ! -f data.dvc ]; then
+                        echo "Models and data not tracked yet, adding to DVC"
+                        # Add models and data directories to DVC tracking if they exist
+                        [ -d models ] && dvc add models
+                        [ -d data ] && dvc add data
+                    fi
+                    
                     # Pull models from DVC tracking
-                    dvc pull
+                    dvc pull -v  # Added -v for verbose output to debug
                 '''
             }
         }
-        
-        // stage('Run Code with Models') {
-        //     steps {
-        //         sh '''
-        //             . ${VENV_PATH}/bin/activate
-                    
-        //             # Run your code that uses the models
-        //             python src/run_model.py
-        //         '''
-        //     }
-        // }
-        
-        // stage('Track Model Changes') {
-        //     steps {
-        //         sh '''
-        //             . ${VENV_PATH}/bin/activate
-                    
-        //             # Add any new model outputs to DVC tracking
-        //             dvc add models/new_output_model.pkl
-                    
-        //             # Commit DVC changes
-        //             git add .dvc/config models/*.dvc
-        //             git commit -m "Update model tracking" || echo "No changes to commit"
-        //         '''
-        //     }
-        // }
     }
     
-    // post {
-    //     always {
-    //         echo "Pipeline completed"
-    //         // Uncomment if you want workspace cleanup
-    //         // cleanWs()
-    //     }
-    // }
+    post {
+        always {
+            echo "Pipeline completed"
+        }
+    }
 }
