@@ -26,24 +26,25 @@ pipeline {
             }
         }
         
-        stage('Initialize DVC') {
+        stage('Fix DVC Permissions') {
             steps {
+                // This requires that the Jenkins user has sudo access or that someone runs this manually once
                 sh '''
-                    . ${VENV_PATH}/bin/activate
+                    # Make the DVC data directory accessible to Jenkins
+                    # Option 1: If you have sudo access in Jenkins:
+                    # sudo chmod -R 755 ${DVC_MODELS_DIR}
                     
-                    # Initialize DVC if not already done
+                    # Option 2: Copy the data to a location Jenkins can access
+                    mkdir -p ${WORKSPACE}/dvc_cache
+                    
+                    # Configure DVC to use the workspace cache
+                    . ${VENV_PATH}/bin/activate
+                    dvc cache dir ${WORKSPACE}/dvc_cache
+                    
+                    # You might need to initialize DVC first
                     if [ ! -d .dvc ]; then
                         dvc init
                     fi
-                    
-                    # Configure DVC to use local directory for models
-                    dvc config core.no_scm true
-                    
-                    # Add the external data directory as a remote (if not already added)
-                    dvc remote add -d local-models ${DVC_MODELS_DIR}
-                    
-                    # Make sure the directories exist
-                    mkdir -p models data
                 '''
             }
         }
@@ -54,16 +55,14 @@ pipeline {
                     . ${VENV_PATH}/bin/activate
                     dvc --version
                     
-                    # First check if models and data are being tracked by DVC
-                    if [ ! -f models.dvc ] && [ ! -f data.dvc ]; then
-                        echo "Models and data not tracked yet, adding to DVC"
-                        # Add models and data directories to DVC tracking if they exist
-                        [ -d models ] && dvc add models
-                        [ -d data ] && dvc add data
-                    fi
+                    # Create a new remote that points to a location Jenkins can access
+                    dvc remote add -d workspace-remote ${WORKSPACE}/dvc_cache
                     
-                    # Pull models from DVC tracking
-                    dvc pull -v  # Added -v for verbose output to debug
+                    # Try pulling from the new remote
+                    dvc pull -v
+                    
+                    # If the above fails, you may need to manually copy the model files
+                    mkdir -p models data
                 '''
             }
         }
