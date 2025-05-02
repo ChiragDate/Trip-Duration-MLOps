@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Define environment variables
         PYTHON_VERSION = '3.10.12'
-        DVC_MODELS_DIR = "/home/mohit-marfatia/SPE/data"
+        DVC_MODELS_DIR = "/home/mohit-marfatia/SPE/train-data"
         VENV_PATH = "${WORKSPACE}/trip_duration_venv"
     }
     
