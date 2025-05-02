@@ -1,0 +1,6 @@
+[core]
+    remote = local-remote
+[cache]
+    dir = /home/mohit-marfatia/SPE/data
+['remote "local-remote"']
+    url = /home/mohit-marfatia/SPE/data
